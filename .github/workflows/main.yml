@@ -1,16 +1,40 @@
 name: pipeline-v1
+
 on:
   push:
     branches: ["main"]
   workflow_dispatch:
+
 jobs:
-  test:
-    name: "job"
+  first-job:
+    name: "My First Job"
     runs-on: ubuntu-latest
-    steps: 
-      - name: "First action"
-        run: echo "Hello World"
-      - name: "2Act"
+    steps:
+      - name: "My first action"
+        run: echo "Hello World !!!"
+
+      - name: "Second action"
         run: |
-          echo "Create workflow!"
-    
+          echo "You created your first workflow"
+
+      - name: "Python script"
+        run: |
+          variable = "Hello World"
+          print(variable)
+        shell: python
+
+  second-job:
+    name: "Node.js Environment Setup"
+    runs-on: ubuntu-latest
+    needs: [first-job]
+    steps:
+      - name: "Check current Node.js version"
+        run: node --version
+
+      - name: "Set Node.js version 20.13.1"
+        uses: actions/setup-node@v4.0.2
+        with:
+          node-version: "20.13.1"
+
+      - name: "Check Node.js version after installation"
+        run: node --version
